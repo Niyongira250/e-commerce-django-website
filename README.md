@@ -1,6 +1,8 @@
 # e-commerce-django-website
 django e-commerce website for front and back end
 
+# App is "store"   project is "style"
+
 # Stylé eCommerce with AI Chatbot
 
 An eCommerce web application built with Django. It includes:
