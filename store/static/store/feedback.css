@@ -1,0 +1,126 @@
+/* General Page Style */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f7f9fc;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+form {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+form button {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+form button:hover {
+    background-color: #27ae60;
+}
+
+/* Filter Links */
+.filters {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.filters a {
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.filters a:hover {
+    text-decoration: underline;
+}
+
+/* Feedback Display */
+.feedback {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background: #fff;
+    border-left: 5px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.feedback p {
+    margin: 8px 0;
+}
+
+.feedback.positive {
+    border-left-color: #27ae60;
+}
+
+.feedback.negative {
+    border-left-color: #c0392b;
+}
+
+.tag {
+    display: inline-block;
+    background: #bdc3c7;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    
+}
+
+.feedback.positive .tag {
+    background: #2ecc71;
+}
+
+.feedback.negative .tag {
+    background: #e74c3c;
+}
+
+/* Footer */
+footer.address {
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+    background: #2c3e50;
+    color: #ecf0f1;
+    flex-wrap: wrap;
+}
+
+footer.address div {
+    margin: 10px;
+}
+
+footer.address p, footer.address a {
+    margin: 5px 0;
+    color: #ecf0f1;
+    text-decoration: none;
+}
+
+footer.address a:hover {
+    text-decoration: underline;
+}
+
+.darker {
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 10px;
+}

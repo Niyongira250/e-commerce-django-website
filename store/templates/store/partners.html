@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Our Partners</title>
+    <link rel="stylesheet" href="{% static 'store/partners.css' %}"/>
+    <link rel="stylesheet" href="{% static 'store/homestyles.css' %}?v={{ timestamp }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header class="links">
+        <nav>
+            <li style="margin-right: 20px; list-style: none;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <img src="{% static 'images/Stylé.png' %}" alt="Stylé Logo" style="height: 95px; width: 95px; object-fit: contain;">
+                    <span style="font-size: 14px; color: #ddd; margin-top: 5px;">Your rendezvous with fashion</span>
+                </div>
+            </li>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'cart' %}">Cart</a></li>
+            <li><a href="{% url 'catalog' %}">Catalog</a></li>
+            <li><a href="{% url 'your_address' %} ">Youraddress</a></li>
+            <li style="margin-left:auto; color:white;">Welcome, 
+                <a href="{% url 'user_profile' %}">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="Profile" class="category-image">
+                    {% else %}
+                        <img src="{% static 'images/menuser.png' %}" alt="Default Profile" class="category-image">
+                    {% endif %}
+                </a>  {{ user.username }}
+            </li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+            <li style="margin-left:auto;"><a href="{% url 'login' %}">Sign in</a></li>
+            {% endif %}
+        </nav>
+    </header>
+    <div class="partners-section">
+        <h1>Our Trusted Partners</h1>
+        <p class="intro">
+            We are proud to work closely with these world-class brands and institutions who help us deliver exceptional products and services to our customers.
+        </p>
+
+        <div class="partner-grid">
+            {% for partner in partners %}
+                <div class="partner-card">
+                    <img src="{{ partner.logo.url }}" alt="{{ partner.name }} logo">
+                    <h2>{{ partner.name }}</h2>
+                    <p>{{ partner.description }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+    <hr>
+    <footer class="address">
+        <div>
+            <p class="darker">Address</p>
+            <p>Phone number: +250790081638</p>
+            <p>street: kn 23 ave</p>
+            <p>email: niyongiraeric8@gmail.com</p>
+            <div class="social-icons">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://wa.me/250790081638" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div>
+            <p class="darker">About us</p>
+            <p><a href="{% url 'partners' %}">Partners</a></p>
+            <p><a href="{% url 'feedback' %}">Feedback</a></p>
+            <p><a href="{% url 'blog_list' %}">blog</a></p>
+        </div>
+        <div>
+            <p class="darker">Legal</p>
+            <p>Recognized by</p>
+            <p>Certificates</p>
+            <p>Copyright</p>
+        </div>
+    </footer>
+</body>
+</html>

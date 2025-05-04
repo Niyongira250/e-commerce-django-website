@@ -1,0 +1,117 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ blog.title }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'store/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'store/homestyles.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header class="links">
+        <nav>
+            <li style="margin-right: 20px; list-style: none;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <img src="{% static 'images/Stylé.png' %}" alt="Stylé Logo" style="height: 95px; width: 95px; object-fit: contain;">
+                    <span style="font-size: 14px; color: #ddd; margin-top: 5px;">Your rendezvous with fashion</span>
+                </div>
+            </li>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'blog_list' %}">Blog</a></li>
+            <li>{% if user.is_authenticated %}
+                <li><a href="{% url 'your_address' %} ">Youraddress</a></li>
+                <li style="margin-left:auto; color:white;">Welcome, 
+                    <a href="{% url 'user_profile' %}">
+                        {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" alt="Profile" class="category-image">
+                        {% else %}
+                            <img src="{% static 'images/menuser.png' %}" alt="Default Profile" class="category-image">
+                        {% endif %}
+                    </a> {{ user.username }}
+                </li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}</li>
+        </nav>
+    </header>
+
+    <div class="blog-detail">
+    
+        {% if blog.image %}
+            <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="blog-image">
+        {% endif %}
+    
+        <h1>{{ blog.title }}</h1>
+        <p><strong>Author:</strong> {{ blog.author }}</p>
+        <p><strong>Published on:</strong> {{ blog.created_at|date:"F d, Y" }}</p>
+        <div class="blog-content">
+            <p>{{ blog.content }}</p>
+        </div>
+    </div>
+    
+    
+
+    <section class="comments">
+        <h2>Comments</h2>
+
+        {% if comments %}
+            <ul>
+                {% for comment in comments %}
+                    <li>
+                        <p><strong>{{ comment.author }}:</strong> {{ comment.text }}</p>
+                        <p><em>{{ comment.created_at|date:"F d, Y H:i" }}</em></p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No comments yet. Be the first to comment!</p>
+        {% endif %}
+    </section>
+
+    <section class="comment-form">
+        <h3>Leave a Comment</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                <label for="text">Your Comment:</label>
+                <textarea name="text" id="text" rows="4" required></textarea>
+            </div>
+            <div>
+                <input type="submit" value="Post Comment" />
+            </div>
+        </form>
+    </section>
+    
+    <hr>
+    <footer class="address">
+        <div>
+            <p class="darker">Address</p>
+            <p>Phone number: +250790081638</p>
+            <p>street: kn 23 ave</p>
+            <p>email: niyongiraeric8@gmail.com</p>
+            <div class="social-icons">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://wa.me/250790081638" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div>
+            <p class="darker">About us</p>
+            <p><a href="{% url 'partners' %}">Partners</a></p>
+            <p><a href="{% url 'feedback' %}">Feedback</a></p>
+            <p><a href="{% url 'blog_list' %}">blog</a></p>
+        </div>
+        <div>
+            <p class="darker">Legal</p>
+            <p>Recognized by</p>
+            <p>Certificates</p>
+            <p>Copyright</p>
+        </div>
+    </footer>
+
+</body>
+</html>

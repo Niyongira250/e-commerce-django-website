@@ -1,0 +1,30 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">❤️ Your Favorite Products</h2>
+
+    {% if favorites %}
+        <div class="row">
+            {% for fav in favorites %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img src="{{ fav.product.image.url }}" class="card-img-top" alt="{{ fav.product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ fav.product.name }}</h5>
+                            <p class="card-text">Price: {{ fav.product.price }}</p>
+                            <a href="{% url 'toggle_favorite' fav.product.id %}" class="btn btn-danger">
+                                Remove from Favorites
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">You didn't like anything yet.</div>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">← Back to Home</a>
+</div>
+{% endblock %}

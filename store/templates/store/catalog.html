@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category_name }} Products</title>
+    <link rel="stylesheet" href="{% static 'store/homestyles.css' %}" />
+    <link rel="stylesheet" href="{% static 'store/catalog.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+
+<script src="{% static 'store/catalog.js' %}"></script>
+<body>
+    <header class="links">
+        <nav>
+            <li style="margin-right: 20px; list-style: none;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <img src="{% static 'images/Stylé.png' %}" alt="Stylé Logo" style="height: 95px; width: 95px; object-fit: contain;">
+                    <span style="font-size: 14px; color: #ddd; margin-top: 5px;">Your rendezvous with fashion</span>
+                </div>
+            </li>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'cart' %}">Cart</a></li>
+            <li><a href="{% url 'catalog' %}">Catalog</a></li>
+            <li><a href="{% url 'your_address' %} ">Youraddress</a></li>
+            <li style="margin-left:auto; color:white;"> 
+                <a href="{% url 'user_profile' %}">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="Profile" class="category-image">
+                    {% else %}
+                        <img src="{% static 'images/menuser.png' %}" alt="Default Profile" class="category-image">
+                    {% endif %}
+                </a> {{ user.username }}
+            </li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+            <li style="margin-left:auto;"><a href="{% url 'login' %}">Sign in</a></li>
+            {% endif %}
+        </nav>
+    </header>
+    
+    <form id="search-form" method="get" action="{% url 'search_products' %}" autocomplete="off" style="display: flex; align-items: center; gap: 8px; position: relative;">
+        <input type="text" id="search-input" style="width: 400px;" name="q" placeholder="Search products..." class="search-box">
+        <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+        <div id="suggestions" class="suggestions-box"></div>
+    </form>
+    
+    
+    <main>
+        <nav class="category-nav">
+            <ul class="category-list">
+
+                <!-- Men -->
+                <li class="category-item">
+                    <a href="{% url 'catalog_by_category' 'Men' %}">
+                        {% if men_products %}
+                            <img src="{{ men_products.0.image.url }}" alt="{{ men_products.0.name }}" class="category-image">
+                        {% else %}
+                            <img src="{% static 'images/menuser.png' %}" alt="Default Image" class="category-image">
+                        {% endif %}
+                        <span>Men</span>
+                    </a>
+                </li>
+
+                <!-- Women -->
+                <li class="category-item">
+                    <a href="{% url 'catalog_by_category' 'Women' %}">
+                        {% if women_products %}
+                            <img src="{{ women_products.0.url }}" alt="{{ women_products.0.name }}" class="category-image">
+                        {% else %}
+                            <img src="{% static 'images/user.png' %}" alt="Default Image" class="category-image">
+                        {% endif %}
+                        <span>Women</span>
+                    </a>
+                </li>
+
+                <!-- Kids -->
+                <li class="category-item">
+                    <a href="{% url 'catalog_by_category' 'Kids' %}">
+                        {% if kids_products %}
+                            <img src="{{ kids_products.0.image.url }}" alt="{{ kids_products.0.name }}" class="category-image">
+                        {% else %}
+                            <img src="{% static 'images/kiduser.png' %}" alt="Default Image" class="category-image">
+                        {% endif %}
+                        <span>Kids</span>
+                    </a>
+                </li>
+
+                <!-- Summer -->
+                <li class="category-item">
+                    <a href="{% url 'catalog_by_category' 'Summer' %}">
+                        {% if summer_products %}
+                            <img src="{{ summer_products.0.image.url }}" alt="{{ summer_products.0.name }}" class="category-image">
+                        {% else %}
+                            <img src="{% static 'images/summericon.jpeg' %}" alt="Default Image" class="category-image">
+                        {% endif %}
+                        <span>Summer</span>
+                    </a>
+                </li>
+
+                <!-- Winter -->
+                <li class="category-item">
+                    <a href="{% url 'catalog_by_category' 'Winter' %}">
+                        {% if winter_products %}
+                            <img src="{{ winter_products.0.image.url }}" alt="{{ winter_products.0.name }}" class="category-image">
+                        {% else %}
+                            <img src="{% static 'images/wintericon.jpeg' %}" alt="Default Image" class="category-image">
+                        {% endif %}
+                        <span>Winter</span>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        
+        <h2>Products in {{ category_name }} Category</h2>
+
+        <div class="products">
+            {% for product in products %}
+                <div class="product-card">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description }}</p>
+                    <p><strong>${{ product.price }}</strong></p>
+
+                    <form action="{% url 'add_to_cart' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="add-to-cart-button">Add to Cart</button>
+                    </form>
+                </div>
+            {% empty %}
+                <p>No products available in this category.</p>
+            {% endfor %}
+            <form action="{% url 'download_pdf' %}" method="get" style="margin: 20px 0;">
+                <button type="submit" class="download-btn">Download Catalog (PDF)</button>
+            </form>
+            
+        </div>
+    </main>
+    
+    <hr>
+    <footer class="address">
+        <div>
+            <p class="darker">Address</p>
+            <p>Phone number: +250790081638</p>
+            <p>street: kn 23 ave</p>
+            <p>email: niyongiraeric8@gmail.com</p>
+            <div class="social-icons">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://wa.me/250790081638" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div>
+            <p class="darker">About us</p>
+            <p><a href="{% url 'partners' %}">Partners</a></p>
+            <p><a href="{% url 'feedback' %}">Feedback</a></p>
+            <p><a href="{% url 'blog_list' %}">blog</a></p>
+        </div>
+        <div>
+            <p class="darker">Legal</p>
+            <p>Recognized by</p>
+            <p>Certificates</p>
+            <p>Copyright</p>
+        </div>
+    </footer>
+    
+    
+    <script src="{% static 'store/catalog.js' %}"></script>
+    
+</body>
+</html>

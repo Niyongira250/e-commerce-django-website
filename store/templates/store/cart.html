@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Pendings in cart</title>
+        <meta charset="UTF-8">
+        <meta <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'store/homestyles.css' %}"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </head>
+    <body>
+        <header class="links">
+            <nav>
+                <li style="margin-right: 20px; list-style: none;">
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <img src="{% static 'images/Stylé.png' %}" alt="Stylé Logo" style="height: 95px; width: 95px; object-fit: contain;">
+                        <span style="font-size: 14px; color: #ddd; margin-top: 5px;">Your rendezvous with fashion</span>
+                    </div>
+                </li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'cart' %}">Cart {{ products|length }}</a></li>
+                <li><a href="{% url 'catalog' %}">Catalog</a></li>
+                <li><a href="{% url 'favorites' %}">❤️ Favorites</a></li>
+                <li><a href="{% url 'your_address' %} ">Youraddress</a></li>
+                <li>{% if user.is_authenticated %}
+                    <li style="margin-left:auto; color:white;"> 
+                        <a href="{% url 'user_profile' %}">
+                            {% if user.profile_image %}
+                                <img src="{{ user.profile_image.url }}" alt="Profile" class="category-image">
+                            {% else %}
+                                <img src="{% static 'images/menuser.png' %}" alt="Default Profile" class="category-image">
+                            {% endif %}
+                        </a> {{ user.username }}
+                    </li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}</li>
+            </nav>
+        </header>
+        <main>
+            <p>Number of products in cart: {{ products|length }}</p>
+
+            <table border="1px">
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>SubTotal</th>
+                </tr>
+                {% for item in products %}
+                <tr>
+                    <td>
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="80" height="80"><br>
+                        
+                        <!-- Remove from Cart Button -->
+                        <form action="{% url 'remove_from_cart' item.product.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" style="margin-top: 5px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">
+                                Remove
+                            </button>
+                        </form>
+                    </td>
+                    
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.product.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </table>            
+            <hr>
+            <form method="POST" action="{% url 'cart' %}">
+                {% csrf_token %}
+                <div class="payment">
+                    <div class="payment-left">
+                        <p>Payment Code</p>
+                        <input type="text" name="promocode" placeholder="Enter coupon ID">
+                        <button type="submit" name="apply_coupon">Apply Coupon</button>
+                        {% if coupon_message %}
+                            <p style="color: green;">{{ coupon_message }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="payment-right">
+                        <p>Cart Total</p>
+                        {% if discount %}
+                            <p>Discount: -${{ discount }}</p>
+                        {% endif %}
+                        <p>Total: ${{ total }}</p>
+                        <input type="text" name="phone_number" placeholder="Enter phone (e.g. 25078XXXXXXX)" required>
+                        <button type="submit" name="checkout">Check Out</button>
+                    </div>
+                </div>
+            </form>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            
+                    </div>
+                </div>
+            </form>
+            
+            
+        </main>
+        <hr>
+        <footer class="address">
+            <div>
+                <p class="darker">Address</p>
+                <p>Phone number: +250790081638</p>
+                <p>street: kn 23 ave</p>
+                <p>email: niyongiraeric8@gmail.com</p>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/250790081638" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div>
+                <p class="darker">About us</p>
+                <p><a href="{% url 'partners' %}">Partners</a></p>
+                <p><a href="{% url 'feedback' %}">Feedback</a></p>
+                <p><a href="{% url 'blog_list' %}">blog</a></p>
+            </div>
+            <div>
+                <p class="darker">Legal</p>
+                <p>Recognized by</p>
+                <p>Certificates</p>
+                <p>Copyright</p>
+            </div>
+        </footer>
+
+    </body>
+</html>

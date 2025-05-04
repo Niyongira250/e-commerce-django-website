@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html> 
+<html lang="en">
+    <head>
+        <title>style e-commerce</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'store/homestyles.css' %}?v={{ timestamp }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </head>
+    <body>
+        <header class="links">
+            <nav>
+                <li style="margin-right: 20px; list-style: none;">
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <img src="{% static 'images/Stylé.png' %}" alt="Stylé Logo" style="height: 95px; width: 95px; object-fit: contain;">
+                        <span style="font-size: 14px; color: #ddd; margin-top: 5px;">Your rendezvous with fashion</span>
+                    </div>
+                </li>                
+                <li><a href="{% url 'home' %}">Home</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'cart' %}">Cart</a></li>
+                <li><a href="{% url 'catalog' %}">Catalog</a></li>
+                <li><a href="{% url 'favorites' %}">Favorites</a></li>
+                <li><a href="{% url 'your_address' %} ">Youraddress</a></li>
+                <li style="margin-left:auto; color:white;">Welcome, 
+                    <a href="{% url 'user_profile' %}">
+                        {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" alt="Profile" class="category-image">
+                        {% else %}
+                            <img src="{% static 'images/menuser.png' %}" alt="Default Profile" class="category-image">
+                        {% endif %}
+                    </a>  {{ user.username }}
+                </li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li style="margin-left:auto;"><a href="{% url 'login' %}">Sign in</a></li>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main class="content">
+            <div class="middle_upper">
+                <div class="middle_upper_left">
+                    <div class="slideshow-container">
+                        <div class="mySlides fade">
+                            <img src="{% static 'images/wallpaper.avif' %}" alt="image 1"/>
+                        </div>
+                        <div class="mySlides fade">
+                            <img src="{% static 'images/wallpaper2.avif' %}" alt="image 2"/>
+                        </div>
+                        <div class="mySlides fade">
+                            <img src="{% static 'images/walllpaper3.avif' %}" alt="image 3"/>
+                        </div>
+                    </div>
+                    <p>Shop from the best mall of Africa</p>
+                </div>
+                
+                <div class="middle_upper_right">
+                    {% for product in products|slice:":3" %}
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </div>
+                        <div class="product-info">
+                            <p class="product-name">{{ product.name }}</p>
+                            <p class="product-price">${{ product.price }}</p>
+                                <div class="button-group" style="display: flex; gap: 10px; align-items: center;">
+                                <form action="{% url 'add_to_cart' product.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="cart-btn">Add to Cart</button>
+                                </form>
+                
+                                <form action="{% url 'toggle_favorite' product.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="heart-btn" style="background: none; border: none; font-size: 24px; cursor: pointer;">❤️</button>
+                                </form>
+                            </div>
+                
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+            </div>
+            <div class="middle_lower">
+                {% for product in products|slice:"2:" %}
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    </div>
+            
+                    <div class="product-info">
+                        <p class="product-name">{{ product.name }}</p>
+                        <p class="product-price">${{ product.price }}</p>
+            
+                        <div class="button-group" style="display: flex; gap: 10px; align-items: center;">
+                            <form action="{% url 'add_to_cart' product.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="cart-btn">Add to Cart</button>
+                            </form>
+            
+                            <form action="{% url 'toggle_favorite' product.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="heart-btn" style="background: none; border: none; font-size: 24px; cursor: pointer;">❤️</button>
+                            </form>
+                        </div>
+            
+                    </div>
+                </div>
+                {% empty %}
+                <p>No products available right now.</p>
+                {% endfor %}
+            </div>
+            
+        </main>
+
+        <hr>
+        <footer class="address">
+            <div>
+                <p class="darker">Address</p>
+                <p>Phone number: +250790081638</p>
+                <p>Street: KN 23 Ave</p>
+                <p>Email: niyongiraeric8@gmail.com</p>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/250790081638" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                </div>
+                <!-- Chat Button -->
+                <div id="chat-toggle" onclick="toggleChat()">Ask our bot</div>
+
+                <!-- Chat Box -->
+                <div id="chat-box">
+                    <div id="chat-header">Stylé AI Bot</div>
+                    <div id="chat-body"></div>
+                    <input type="text" id="chat-input" placeholder="Ask me something..." onkeypress="handleKey(event)">
+                </div>
+
+            </div>
+
+        
+            <div>
+                <p class="darker">About us</p>
+                <p><a href="{% url 'partners' %}">Partners</a></p>
+                <p><a href="{% url 'feedback' %}">Feedback</a></p>
+                <p><a href="{% url 'blog_list' %}">Blog</a></p>
+            </div>
+        
+            <div>
+                <p class="darker">Legal</p>
+                <p>Recognized by</p>
+                <p>Certificates</p>
+                <p>Copyright</p>
+            </div>
+        
+            <!-- Newsletter Subscription -->
+            <div class="newsletter">
+                <p class="darker">Subscribe to our Newsletter</p>
+                <form action="#" method="POST" class="subscribe-form">
+                    {% csrf_token %}
+                   <p> <input type="email" name="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button></p>
+                </form>
+            </div>
+        </footer>
+        
+        <script src="{% static 'js/slideshow.js' %}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Check if cookie exists
+                if (!localStorage.getItem("cookiesAccepted")) {
+                    document.getElementById("cookie-banner").style.display = "block";
+                }
+        
+                // On click "Accept"
+                document.getElementById("accept-cookies").addEventListener("click", function () {
+                    localStorage.setItem("cookiesAccepted", "true");
+                    document.getElementById("cookie-banner").style.display = "none";
+                });
+            });
+        </script>
+        <script>
+            const qaPairs = {
+                "hi": "Hello! How can I help you today?",
+                "what are your delivery hours": "We deliver from 8 AM to 8 PM, Monday to Saturday.",
+                "how do i pay": "You can pay via MTN MoMo or bank card at checkout.",
+                "do you deliver to kigali": "Yes, we deliver across all areas of Kigali.",
+                "who are you": "I am Stylé's virtual assistant here to help you shop smart!",
+                // Add more Q&A here
+            };
+            
+            function toggleChat() {
+                const box = document.getElementById("chat-box");
+                box.style.display = box.style.display === "flex" ? "none" : "flex";
+            }
+            
+            function handleKey(event) {
+                if (event.key === "Enter") {
+                    const input = document.getElementById("chat-input");
+                    const chatBody = document.getElementById("chat-body");
+                    const userMsg = input.value.trim().toLowerCase();
+            
+                    if (userMsg) {
+                        chatBody.innerHTML += `<div><strong>You:</strong> ${input.value}</div>`;
+                        const response = qaPairs[userMsg] || "Sorry, I don't understand that yet.";
+                        chatBody.innerHTML += `<div><strong>Bot:</strong> ${response}</div>`;
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                        input.value = "";
+                    }
+                }
+            }
+            </script>
+            
+    </body>
+</html>

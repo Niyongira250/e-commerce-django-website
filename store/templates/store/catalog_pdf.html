@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Catalog</title>
+   
+    <link rel="stylesheet" href="{% static 'store/download.css' %}"/>
+    <link rel="stylesheet" href="{% static 'store/homestyles.css' %}"/>
+</head>
+<body>
+    <h1>Product Catalog</h1>
+    <ul>
+        {% for product in products %}
+            <li>
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <p><strong>Price:</strong> ${{ product.price }}</p>
+                
+                <!-- Use absolute URL for the image -->
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="150" height="150" />
+            </li>
+        {% endfor %}
+    </ul>
+
+    
+</body>
+</html>

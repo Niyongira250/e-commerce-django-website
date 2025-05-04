@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create new account</title>
+        <meta charset="UTF-8">
+        <meta <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'store/homestyles.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </head>
+    <body>
+        <header class="links">
+            <nav>
+                <li style="margin-right: 20px; list-style: none;">
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <img src="{% static 'images/Stylé.png' %}" alt="Stylé Logo" style="height: 95px; width: 95px; object-fit: contain;">
+                        <span style="font-size: 14px; color: #ddd; margin-top: 5px;">Your rendezvous with fashion</span>
+                    </div>
+                </li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                
+                <li><a href="{% url 'login' %}">Sign in</a></li>
+            </nav>
+        </header>
+        
+        <form method="POST" enctype="multipart/form-data" action="{% url 'register' %}">
+
+            {% csrf_token %}
+            <div class="border">
+                <label for="Surname">Surname:</label><br>
+                <input type="text" id="Surname" name="Surname" placeholder="enter Surname" required><br>
+        
+                <label for="Firstname">First name:</label><br>
+                <input type="text" id="Firstname" name="Firstname" placeholder="enter Firstname" required><br>
+        
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" placeholder="enter email" required><br>
+        
+                <label for="telephone">Telephone:</label><br>
+                <input type="text" id="telephone" name="telephone" placeholder="enter telephone" required><br>
+        
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password" placeholder="enter new password" required><br>
+
+                <label for="profile_image">Profile Image:</label><br>
+                <input type="file" id="profile_image" name="profile_image"><br>
+        
+                <input type="submit" value="Register">
+            </div>
+        </form>
+        <hr>
+        <footer class="address">
+            <div>
+                <p class="darker">Address</p>
+                <p>Phone number: +250790081638</p>
+                <p>street: kn 23 ave</p>
+                <p>email: niyongiraeric8@gmail.com</p>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/250790081638" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div>
+                <p class="darker">About us</p>
+                <p><a href="{% url 'partners' %}">Partners</a></p>
+                <p><a href="{% url 'feedback' %}">Feedback</a></p>
+                <p><a href="{% url 'blog_list' %}">blog</a></p>
+            </div>
+            <div>
+                <p class="darker">Legal</p>
+                <p>Recognized by</p>
+                <p>Certificates</p>
+                <p>Copyright</p>
+            </div>
+        </footer>
+    </body>
+</html>
